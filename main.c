@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/12 19:31:47 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 07:13:17 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	debug_game(t_game *game)
 	if (game->nbr)
 		printf("ant number:%d\n", game->nbr);
 	printf("Rooms\nName\t\t\tID\tX\tY\t\n");
+	if (!(game->rmlst))
+		return ;
 	while (game->rmlst)
 	{
 		printf("%-24s%d\t%d\t%d\n", (game->rmlst)->nm, (game->rmlst)->id, \
@@ -84,7 +86,8 @@ int ft_getarraylen(char **array)
 
 /*
  * Rooms can be separated by multiple spaces
- * Room name can not start with an L
+ * Room name can NOT start with an L
+ * Room names can NOT contain a '-' b/c undefined behavior for links
  * I ignore leading or trailing white space for rooms
  * Must provide 2 coordinates which are numbers.
  * I allow negative (-) and (+) numbers for coordinates.
@@ -125,10 +128,9 @@ int isroom(char *ln, t_game *game)
 	words = ft_strsplit(ln, ' ');
 	if (*ln == '#')
 		return (2);
-	if (*ln == 'L' || (ft_getarraylen(words) != 3) \
+	if (*ln == 'L' || (ft_getarraylen(words) != 3) || ft_strchr(words[0], '-') \
 			|| !ft_isnbr(words[1]) || !ft_isnbr(words[2]))
 		return (0);
-	//can add check for leading and trialing whitespace above
 	tmp = makeroom(words[0], atoi(words[1]), atoi(words[2]));
 	if (duprmcoords(tmp, game->rmlst))
 		return (0);
@@ -157,18 +159,14 @@ int valstartorend(int sore, t_game *game)
 		return (0);
 	if (i == 2)
 	{
-		valstartorend(sore, game);
+		i = valstartorend(sore, game);
 		free(check);
-		return (2);
+		return (i);
 	}
 	else if (i == 1 && sore == 1)
-	{
 		game->start = game->rmlst;
-	}
 	else if (i == 1 && sore == 0)
-	{
 		game->end = game->rmlst;
-	}
 	printf("%s\n", check);
 	free(check);
 	return (2);
@@ -183,9 +181,7 @@ int valroom(char *ln, int *command, t_game *game)
 
 	if ((!ft_strcmp("##end", ln) && (end > 0)) ||
 		(((!ft_strcmp("##start", ln)) && (start > 0))))
-	{
 		return (0);
-	}
 	else if (!(ft_strcmp("##start", ln)) && start == 0)
 	{
 		ft_printf("##start\n");
@@ -199,13 +195,9 @@ int valroom(char *ln, int *command, t_game *game)
 		return (valstartorend(0, game));
 	}
 	else if (*ln == '#')
-	{
 		return (2);
-	}
 	else if (isroom(ln, game))
-	{
 		return (1);
-	}
 	*command = 2;
 	return (3);
 }
@@ -247,7 +239,6 @@ int	valinput(char *ln, t_game *game)
 		printf("you are in link validation.");
 		return (vallink(ln));
 	}
-
 	printf("did not get processed by valinput\n");
 	return (0);
 }
