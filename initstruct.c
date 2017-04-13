@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 07:37:51 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 13:09:11 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,3 +44,14 @@ t_room	*makeroom(char *name, int x, int y)
 }
 
 
+t_lnk	*makelnk(char *one, char *two)
+{
+	t_lnk	*lnk;
+
+	lnk = malloc(sizeof(t_lnk));
+	lnk->a = one;
+	lnk->b = two;
+	lnk->nx = NULL;
+
+	return (lnk);
+}

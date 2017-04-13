@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 07:46:34 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 14:04:30 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,39 @@
 
 void	debug_game(t_game *game)
 {
-	if (!game)
+	if (!game || !(game->rmlst) || !(game->lnlst))
 		return ;
-	printf("\nYOU ARE IN DEBUG MODE\n");
+	printf("YOU ARE IN DEBUG MODE\n");
+	//debug ant number
 	if (game->nbr)
-		printf("ant number:%d\n", game->nbr);
-	printf("Rooms\nName\t\t\tID\tX\tY\t\n");
-	if (!(game->rmlst))
-		return ;
+		printf("ANT NUMBER:%d\n", game->nbr);
+	//debug start and end
+	printf("\nBEGIN AND END NODES\n");
+	printf("START\n%-24s%d\t%d\t%d\n", (game->start)->nm, (game->start)->id, \
+		   	(game->start)->x, (game->start)->y);
+	printf("END\n%-24s%d\t%d\t%d\n\n", (game->end)->nm, (game->end)->id, \
+		   	(game->end)->x, (game->end)->y);
+	//debug rooms
+	printf("\nROOMS:\n");
+	printf("Name\t\t\tID\tX\tY\t\n");
 	while (game->rmlst)
 	{
 		printf("%-24s%d\t%d\t%d\n", (game->rmlst)->nm, (game->rmlst)->id, \
 			   	(game->rmlst)->x, (game->rmlst)->y);
 		game->rmlst = (game->rmlst)->nx;
 	}
-	printf("START\n%-24s%d\t%d\t%d\n", (game->start)->nm, (game->start)->id, \
-		   	(game->start)->x, (game->start)->y);
-	printf("END\n%-24s%d\t%d\t%d\n", (game->end)->nm, (game->end)->id, \
-		   	(game->end)->x, (game->end)->y);
+	//debug links
+	printf("\nLINKS:\n");
+	while (game->lnlst)
+	{
+		printf("%s\t%s\n", (game->lnlst)->a, (game->lnlst)->b);
+		game->lnlst = (game->lnlst)->nx;
+	}
 }
+
+/*
+** DEBUG FUNCTIONS ABOVE HERE
+*/
 
 int	ft_isnbr(char *ln)
 {
@@ -186,14 +200,7 @@ int valroom(char *ln, int *command, t_game *game)
 
 
 //TO DO
-//finish psuedo code of links validation
 //create a room edges integer map
-//create init struct function for links
-//create a roomexist function
-//create a duplicate link function (can use room edges integer map)
-//validate links according to rules
-//add links to game struct
-//update debug function to print out links in game struct
 //make a coordinate map function to help visualize everything!
 //make a cleanup function.
 //
@@ -209,67 +216,109 @@ int valroom(char *ln, int *command, t_game *game)
  * I do NOT allow duplicate room names, even with diff coords,
  * 		b/c i wouldn't know where to send the ants
  * I IGNORE duplicate links or links to self
+ * I only allow ONE start or end due to undefined behavior otherwise.
 */
 
-/*
-int roomexist(char *ln, t_game *game)
-{
 
+int roomexists(char *one, char *two, t_game *game)
+{
+	t_room	*rm;
+	int		flag;
+
+	rm = game->rmlst;
+	flag = 0;
+	while (rm)
+	{
+		if (!ft_strcmp(one, rm->nm))
+		{
+			flag = 1;
+			break;
+		}
+		rm = rm->nx;
+	}
+	rm = game->rmlst;
+	while (rm)
+	{
+		if (!ft_strcmp(two, rm->nm))
+		{
+			flag += 1;
+			break;
+		}
+		rm = rm->nx;
+	}
+	return (flag == 2 ? 1 : 0);
 }
-*/
 
-//create edges map
-
-/*
-int islink(char *ln, t_game *game)
+int duplnk(char *one, char *two, t_game *game)
 {
-	char	**words;
-	t_lst	*tmp;
+	t_lnk	*lnk;
+	int		flag;
 
-	//check if it's a comment
-	if (*ln == '#')
-		return (2);
+	lnk = game->lnlst;
+	flag = 0;
+	while (lnk)
+	{
+		if (!ft_strcmp(one, lnk->a) && !ft_strcmp(two, lnk->b))
+		{
+			flag = 1;
+			break;
+		}
+		lnk = lnk->nx;
+	}
+	return (flag);
+}
+
+int islink(t_game *game, char *one, char *two)
+{
+	t_lnk	*tmp;
+
 	tmp = NULL;
-	words = ft_strsplit(ln, '-');
-	//check that rooms exists and there are two of them
-	if (*ln == 'L' || (ft_getarraylen(words) != 2) \
-			|| !roomexist(words[0]) || !roomexist(words[1]))
-		return (0);
-	//check if it's a link to itself, don't create this, silently ignore
-	else if (words[0] == words[1])
-		;
-	//check if I already have that link (in the integer edges map)
-	tmp = makelst(words[0], atoi(words[1]), atoi(words[2]));
-
-	tmp->nx = game->rmlst;
-	if (!(game->rmlst))
-		game->rmlst = tmp;
-	else
-		game->rmlst = tmp;
-	free(words[1]);
-	free(words[2]);
-	free(words);
+	if (duplnk(one, two, game))
+	{
+		return (1);
+	}
+	tmp = makelnk(one, two);
+	tmp->nx = game->lnlst;
+	game->lnlst = tmp;
 	return (1);
-
 }
-*/
+
 
 int vallink(char *ln, t_game *game)
 {
 	char	**words;
+	int 	ret;
 
-	if (!(game->end) || !(game->start) || !(game->rmlst))
-		return (0);
+	ret = 0;
 	words = ft_strsplit(ln, '-');
-	if (!ft_strcmp("##end", ln) ||!ft_strcmp("##start", ln))
-		return (0);
-	if (*ln == '#')
-		return (2);
-	if (ft_getarraylen(words) != 2 || words[0][0] == 'L' || words[1][0] == 'L')
-		return (0);
-
-	//if (!roomexists(char *name))not a name of a room, then return 0
-	return (1);
+	if (!(game->end) || !(game->start) || !(game->rmlst))
+	{
+		ret = 0;
+	}
+	else if (!ft_strcmp("##end", ln) ||!ft_strcmp("##start", ln))
+	{
+		ret = 0;
+	}
+	else if (*ln == '#')
+	{
+		ret = 2;
+	}
+	else if (ft_getarraylen(words) != 2 || words[0][0] == 'L' || words[1][0] == 'L')
+	{
+		ret = 0;
+	}
+	else if (!(roomexists(words[0], words[1], game)))
+	{
+		ret = 0;
+	}
+	else if (!ft_strcmp(words[0], words[1]))
+	{
+		ret = 1;
+	}
+	else
+		ret = islink(game, words[0], words[1]);
+	free(words);
+	return (ret);
 }
 
 int	valinput(char *ln, t_game *game)
@@ -288,10 +337,8 @@ int	valinput(char *ln, t_game *game)
 	}
 	else if (command == 2)
 	{
-		printf("you are in link validation.");
 		return (vallink(ln, game));
 	}
-	printf("did not get processed by valinput\n");
 	return (0);
 }
 
@@ -316,7 +363,7 @@ int main(void)
 			printf("%s\n", line);
 		free(line);
 	}
-
+	printf("\n");
 	debug_game(game);
 
 	//create function that cleans up the game
