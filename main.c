@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 07:13:17 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 07:46:34 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@
 #include <stdlib.h>
 #include <lem-in.h>
 
-//TO DO
-//make a cleanup function.
-//create init struct function for links
 
 void	debug_game(t_game *game)
 {
@@ -84,18 +81,6 @@ int ft_getarraylen(char **array)
 	return i;
 }
 
-/*
- * Rooms can be separated by multiple spaces
- * Room name can NOT start with an L
- * Room names can NOT contain a '-' b/c undefined behavior for links
- * I ignore leading or trailing white space for rooms
- * Must provide 2 coordinates which are numbers.
- * I allow negative (-) and (+) numbers for coordinates.
- * I do NOT allow duplicate coordinates for 2 diff rooms b/c laws of physics!
- * I do NOT allow duplicate room names, even with diff coords,
- * 		b/c i wouldn't know where to send the ants
- * I IGNORE duplicate links or links to self
-*/
 
 int	duprmcoords(t_room *tmp, t_room *game)
 
@@ -124,24 +109,21 @@ int isroom(char *ln, t_game *game)
 	char	**words;
 	t_room	*tmp;
 
-	tmp = NULL;
-	words = ft_strsplit(ln, ' ');
 	if (*ln == '#')
 		return (2);
+	tmp = NULL;
+	words = ft_strsplit(ln, ' ');
 	if (*ln == 'L' || (ft_getarraylen(words) != 3) || ft_strchr(words[0], '-') \
 			|| !ft_isnbr(words[1]) || !ft_isnbr(words[2]))
 		return (0);
 	tmp = makeroom(words[0], atoi(words[1]), atoi(words[2]));
-	if (duprmcoords(tmp, game->rmlst))
-		return (0);
-	tmp->nx = game->rmlst;
-	if (!(game->rmlst))
-		game->rmlst = tmp;
-	else
-		game->rmlst = tmp;
 	free(words[1]);
 	free(words[2]);
 	free(words);
+	if (duprmcoords(tmp, game->rmlst))
+		return (0);
+	tmp->nx = game->rmlst;
+	game->rmlst = tmp;
 	return (1);
 }
 
@@ -202,12 +184,82 @@ int valroom(char *ln, int *command, t_game *game)
 	return (3);
 }
 
-int vallink(char *ln)
+
+//TO DO
+//finish psuedo code of links validation
+//create a room edges integer map
+//create init struct function for links
+//create a roomexist function
+//create a duplicate link function (can use room edges integer map)
+//validate links according to rules
+//add links to game struct
+//update debug function to print out links in game struct
+//make a coordinate map function to help visualize everything!
+//make a cleanup function.
+//
+
+/*
+ * Rooms can be separated by multiple spaces
+ * Room name can NOT start with an L
+ * Room names can NOT contain a '-' b/c undefined behavior for links
+ * I ignore leading or trailing white space for rooms
+ * Must provide 2 coordinates which are numbers.
+ * I allow negative (-) and (+) numbers for coordinates.
+ * I do NOT allow duplicate coordinates for 2 diff rooms b/c laws of physics!
+ * I do NOT allow duplicate room names, even with diff coords,
+ * 		b/c i wouldn't know where to send the ants
+ * I IGNORE duplicate links or links to self
+*/
+
+/*
+int roomexist(char *ln, t_game *game)
 {
-	//if not a start and end to game, then it's invalid when get to vallinks
-	//chedck game struct
+
+}
+*/
+
+//create edges map
+
+/*
+int islink(char *ln, t_game *game)
+{
+	char	**words;
+	t_lst	*tmp;
+
+	//check if it's a comment
+	if (*ln == '#')
+		return (2);
+	tmp = NULL;
+	words = ft_strsplit(ln, '-');
+	//check that rooms exists and there are two of them
+	if (*ln == 'L' || (ft_getarraylen(words) != 2) \
+			|| !roomexist(words[0]) || !roomexist(words[1]))
+		return (0);
+	//check if it's a link to itself, don't create this, silently ignore
+	else if (words[0] == words[1])
+		;
+	//check if I already have that link (in the integer edges map)
+	tmp = makelst(words[0], atoi(words[1]), atoi(words[2]));
+
+	tmp->nx = game->rmlst;
+	if (!(game->rmlst))
+		game->rmlst = tmp;
+	else
+		game->rmlst = tmp;
+	free(words[1]);
+	free(words[2]);
+	free(words);
+	return (1);
+
+}
+*/
+
+int vallink(char *ln, t_game *game)
+{
 	char	**words;
 
+	if (!(game->end) || !(game->start) || !(game->rmlst))
+		return (0);
 	words = ft_strsplit(ln, '-');
 	if (!ft_strcmp("##end", ln) ||!ft_strcmp("##start", ln))
 		return (0);
@@ -237,7 +289,7 @@ int	valinput(char *ln, t_game *game)
 	else if (command == 2)
 	{
 		printf("you are in link validation.");
-		return (vallink(ln));
+		return (vallink(ln, game));
 	}
 	printf("did not get processed by valinput\n");
 	return (0);
