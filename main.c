@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 14:04:30 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 16:30:16 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,14 @@
 #include <lem-in.h>
 
 
-void	debug_game(t_game *game)
+/*
+** DEBUG FUNCTIONS
+*/
+
+void	debug_game(t_game *game, char **map)
 {
+	int i;
+
 	if (!game || !(game->rmlst) || !(game->lnlst))
 		return ;
 	printf("YOU ARE IN DEBUG MODE\n");
@@ -48,10 +54,36 @@ void	debug_game(t_game *game)
 		printf("%s\t%s\n", (game->lnlst)->a, (game->lnlst)->b);
 		game->lnlst = (game->lnlst)->nx;
 	}
+	printf("\nMAP:\n");
+	i = 0;
+	while (map[i])
+	{
+		printf("%s\n", map[i]);
+		i++;
+	}
 }
 
+
 /*
-** DEBUG FUNCTIONS ABOVE HERE
+** PARSING NOTES
+*/
+
+/*
+ * Rooms can be separated by multiple spaces
+ * Room name can NOT start with an L
+ * Room names can NOT contain a '-' b/c undefined behavior for links
+ * I ignore leading or trailing white space for rooms
+ * Must provide 2 coordinates which are numbers.
+ * I allow negative (-) and (+) numbers for coordinates.
+ * I do NOT allow duplicate coordinates for 2 diff rooms b/c laws of physics!
+ * I do NOT allow duplicate room names, even with diff coords,
+ * 		b/c i wouldn't know where to send the ants
+ * I IGNORE duplicate links or links to self
+ * I only allow ONE start or end due to undefined behavior otherwise.
+*/
+
+/*
+** PARSING FUNCTIONS
 */
 
 int	ft_isnbr(char *ln)
@@ -199,25 +231,8 @@ int valroom(char *ln, int *command, t_game *game)
 }
 
 
-//TO DO
-//create a room edges integer map
-//make a coordinate map function to help visualize everything!
-//make a cleanup function.
-//
 
-/*
- * Rooms can be separated by multiple spaces
- * Room name can NOT start with an L
- * Room names can NOT contain a '-' b/c undefined behavior for links
- * I ignore leading or trailing white space for rooms
- * Must provide 2 coordinates which are numbers.
- * I allow negative (-) and (+) numbers for coordinates.
- * I do NOT allow duplicate coordinates for 2 diff rooms b/c laws of physics!
- * I do NOT allow duplicate room names, even with diff coords,
- * 		b/c i wouldn't know where to send the ants
- * I IGNORE duplicate links or links to self
- * I only allow ONE start or end due to undefined behavior otherwise.
-*/
+
 
 
 int roomexists(char *one, char *two, t_game *game)
@@ -342,9 +357,128 @@ int	valinput(char *ln, t_game *game)
 	return (0);
 }
 
+
+//TO DO
+//coordinate map make a coordinate map function to help visualize everything!
+//create a room edges integer map
+//make a cleanup function.
+//
+
+/*
+** DISPLAY MAP FUNCTIONS
+*/
+
+
+int	xdim(t_game *game)
+{
+	t_room	*tmp;
+	int xmax;
+	int xmin;
+
+	xmax = 0;
+	xmin = 0;
+	tmp = game->rmlst;
+	while (tmp)
+	{
+		if (tmp->x > xmax)
+			xmax = tmp->x;
+		if (tmp->x < xmin)
+			xmin = tmp->x;
+		tmp = tmp->nx;
+	}
+	//becuase it can have a zero row, add 1
+	tmp = game->rmlst;
+	while (tmp)
+	{
+		tmp->x -= xmin;
+		tmp = tmp->nx;
+	}
+	return (((xmax - xmin) + 1));
+}
+
+
+int	ydim(t_game *game)
+{
+	t_room	*tmp;
+	int xmax;
+	int xmin;
+
+	xmax = 0;
+	xmin = 0;
+	tmp = game->rmlst;
+	while (tmp)
+	{
+		if (tmp->y > xmax)
+			xmax = tmp->x;
+		if (tmp->y < xmin)
+			xmin = tmp->x;
+		tmp = tmp->nx;
+	}
+	tmp = game->rmlst;
+	while (tmp)
+	{
+		tmp->y -= xmin;
+		tmp = tmp->nx;
+	}
+	//becuase it can have a zero row, add 1
+	return (((xmax - xmin) + 1));
+}
+
+void	popmap(char **map, int x, int y)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < x)
+	{
+		j = 0;
+		while (j < y)
+		{
+			map[i][j] = '0';
+			j++;
+		}
+		map[i][j] = '\0';
+		i++;
+	}
+}
+
+char	**makeblankmap(t_game *game)
+{
+	char	**map;
+	int		y;
+	int		x;
+	int		i;
+
+	y = ydim(game);
+	x = xdim(game);
+	printf("x:%d  y:%d\n", x, y);
+	map = malloc(sizeof(char *) * (x + 1));
+	map[x] = NULL;
+	i = 0;
+	while (i < x)
+	{
+		map[i] = malloc(sizeof(char) * (y + 1));
+		i++;
+	}
+	printf("i:%d\n", i);
+	popmap(map, x, y);
+	return (map);
+}
+
+char	**makemap(t_game *game)
+{
+	char **map;
+
+	map = makeblankmap(game);
+
+	return (map);
+}
+
 int main(void)
 {
 	char *line;
+	char **map;
 	int i;
 	t_game	*game;
 
@@ -364,11 +498,20 @@ int main(void)
 		free(line);
 	}
 	printf("\n");
-	debug_game(game);
+	//maps!
+	map = makemap(game);
+	//FUNCTION THAT SOLVES IT
+	//get paths
+	//get routes
+	//calcualte routs + paths and print ant-walk function
 
+	//DEBUG
+	debug_game(game, map);
+
+	//CLEANUP
 	//create function that cleans up the game
 	free(game);
-	//game is potentially composed of multiple structs :-).
+	free(map);
 	return (0);
 }
 
