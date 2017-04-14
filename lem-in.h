@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/22 14:06:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 13:08:14 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 19:47:33 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ typedef struct	s_game
 	struct s_room	*start;
 	struct s_room	*rmlst;
 	struct s_lnk	*lnlst;
+	char			**map;
+	int				**edge;
 }				t_game;
 
 typedef struct	s_room
@@ -41,6 +43,8 @@ typedef struct	s_lnk
 {
 	char			*a;
 	char			*b;
+	int				x;
+	int				y;
 	struct s_lnk	*nx;
 }				t_lnk;
 

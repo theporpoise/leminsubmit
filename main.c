@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 16:30:16 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 20:02:58 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@
 ** DEBUG FUNCTIONS
 */
 
-void	debug_game(t_game *game, char **map)
+void	debug_game(t_game *game, char **map, int **edge)
 {
 	int i;
+	int j;
 
 	if (!game || !(game->rmlst) || !(game->lnlst))
 		return ;
@@ -61,6 +62,21 @@ void	debug_game(t_game *game, char **map)
 		printf("%s\n", map[i]);
 		i++;
 	}
+
+	printf("\nEDGE:\n");
+	i = 0;
+	while (edge[i])
+	{
+		j = 0;
+		while (edge[i][j] != -1)
+		{
+			printf("%-2d ", edge[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+
 }
 
 
@@ -386,7 +402,6 @@ int	xdim(t_game *game)
 			xmin = tmp->x;
 		tmp = tmp->nx;
 	}
-	//becuase it can have a zero row, add 1
 	tmp = game->rmlst;
 	while (tmp)
 	{
@@ -420,22 +435,29 @@ int	ydim(t_game *game)
 		tmp->y -= xmin;
 		tmp = tmp->nx;
 	}
-	//becuase it can have a zero row, add 1
 	return (((xmax - xmin) + 1));
 }
 
-void	popmap(char **map, int x, int y)
+void	popmap(char **map, int x, int y, t_game *game)
 {
 	int i;
 	int j;
+	t_room *tmp;
 
+	tmp = game->rmlst;
+	while (tmp)
+	{
+		map[tmp->x][tmp->y] = 'N';
+		tmp = tmp->nx;
+	}
 	i = 0;
 	while (i < x)
 	{
 		j = 0;
 		while (j < y)
 		{
-			map[i][j] = '0';
+			if (!(map[i][j] == 'N'))
+				map[i][j] = '.';
 			j++;
 		}
 		map[i][j] = '\0';
@@ -443,7 +465,7 @@ void	popmap(char **map, int x, int y)
 	}
 }
 
-char	**makeblankmap(t_game *game)
+char	**makemap(t_game *game)
 {
 	char	**map;
 	int		y;
@@ -452,7 +474,7 @@ char	**makeblankmap(t_game *game)
 
 	y = ydim(game);
 	x = xdim(game);
-	printf("x:%d  y:%d\n", x, y);
+//	printf("x:%d  y:%d\n", x, y);
 	map = malloc(sizeof(char *) * (x + 1));
 	map[x] = NULL;
 	i = 0;
@@ -461,29 +483,96 @@ char	**makeblankmap(t_game *game)
 		map[i] = malloc(sizeof(char) * (y + 1));
 		i++;
 	}
-	printf("i:%d\n", i);
-	popmap(map, x, y);
+//	printf("i:%d\n", i);
+	popmap(map, x, y, game);
 	return (map);
 }
 
-char	**makemap(t_game *game)
+
+/*
+** EDGE MAP
+*/
+
+
+void	popedge(int **map, int len, t_game *game)
 {
-	char **map;
+	int i;
+	int j;
+	t_lnk *tmp;
 
-	map = makeblankmap(game);
+	tmp = game->lnlst;
+	while (tmp)
+	{
+		//printf("x:%d y:%d, ", tmp->x, tmp->y);
+		map[tmp->x][tmp->y] = 1;
+		tmp = tmp->nx;
+	}
+	i = 0;
+	while (i < len)
+	{
+		j = 0;
+		while (j < len)
+		{
+			if (map[i][j] != 1)
+				map[i][j] = 0;
+			j++;
+		}
+		map[i][j] = -1;
+		i++;
+	}
+}
 
-	return (map);
+void	lnkstoids(t_lnk *lnk, t_room *rm)
+{
+	//t_lnk	*tmp2;
+	t_room	*tmp;
+
+	while (lnk)
+	{
+		tmp = rm;
+		while(tmp)
+		{
+			if (!ft_strcmp(tmp->nm, lnk->a))
+				lnk->x = tmp->id;
+			if (!ft_strcmp(tmp->nm, lnk->b))
+				lnk->y = tmp->id;
+			tmp = tmp->nx;
+		}
+		lnk = lnk->nx;
+	}
+}
+
+int	**makeedge(t_game *game)
+{
+	int	**edge;
+	int	len;
+	int i;
+
+	len = ((game->rmlst)->id + 1);
+
+	//	printf("len:%d", len);
+	edge = malloc(sizeof(int *) * (len + 1));
+	edge[len] = NULL;
+	i = 0;
+	while (i < len)
+	{
+		edge[i] = malloc(sizeof(int) * (len + 1)); //terminator sentinal
+		i++;
+	}
+//	printf("i:%d\n", i);
+	lnkstoids(game->lnlst, game->rmlst);
+	popedge(edge, len, game);
+	return (edge);
 }
 
 int main(void)
 {
 	char *line;
-	char **map;
 	int i;
 	t_game	*game;
 
 	game = makegame();
-
+	//move all this to a parase input function
 	i = 0;
 	while (get_next_line(0, &line) > 0)
 	{
@@ -491,6 +580,8 @@ int main(void)
 		{
 			printf("Error\n");
 			free(line);
+			//return 0 here, which triggers cleanup function
+			//OR return the cleanup function :-).
 			break ;
 		}
 		else if (i == 1)
@@ -498,20 +589,25 @@ int main(void)
 		free(line);
 	}
 	printf("\n");
-	//maps!
-	map = makemap(game);
+	//end of parse input
+
+	//MAP FOR VISUALIZATION
+	game->map = makemap(game);
+	//MAP FOR SOLVING CONNECTIONS
+	game->edge = makeedge(game);
+
+
 	//FUNCTION THAT SOLVES IT
 	//get paths
 	//get routes
 	//calcualte routs + paths and print ant-walk function
 
 	//DEBUG
-	debug_game(game, map);
+	debug_game(game, game->map, game->edge);
 
 	//CLEANUP
 	//create function that cleans up the game
 	free(game);
-	free(map);
 	return (0);
 }
 

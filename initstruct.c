@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 13:09:11 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/13 19:51:35 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_game	*makegame(void)
 	game->end = NULL;
 	game->rmlst = NULL;
 	game->lnlst = NULL;
-//	game->lnend = NULL;
+	game->map = NULL;
+	game->edge = NULL;
 
 	return (game);
 
@@ -51,6 +52,8 @@ t_lnk	*makelnk(char *one, char *two)
 	lnk = malloc(sizeof(t_lnk));
 	lnk->a = one;
 	lnk->b = two;
+	lnk->x = -1;
+	lnk->y = -1;
 	lnk->nx = NULL;
 
 	return (lnk);
