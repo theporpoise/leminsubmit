@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 12:37:42 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/19 12:59:26 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ t_path	*copypath(t_path *path)
 
 //int	getpath(select path to add to route);
 
+//if equal in length to n, then return
+//if empty, choose the first route
+//else recurse
+
+
+//int		getrouten(t_path *routes, t_game *game, int n)
 int		getrouten(t_path **routes, t_game *game, int n)
 {
 	int i;
@@ -57,14 +63,24 @@ int		getrouten(t_path **routes, t_game *game, int n)
 	ret = 1;
 	i = 0;
 
+//	routes = NULL;
+//	game = NULL;
+//	n = 1;
+
+
+
+
 	while (i < (n + 1))
 	{
 		//select the correct route here, this is thinking
 		tmp = copypath(game->path);
+		//tmp->nx = routes;
 		tmp->nx = routes[n];
 		routes[n] = tmp;
+		//routes = tmp;
 		i++;
 	}
+
 
 	return (ret);
 }
@@ -79,7 +95,8 @@ void	getroutes(t_game *game)
 	game->routes = routearray(n);
 	while (i < n)
 	{
-		getrouten(game->routes, game, i);
+		getrouten((game->routes), game, i);
+		//getrouten((game->routes)[i], game, i);
 		i++;
 	}
 
