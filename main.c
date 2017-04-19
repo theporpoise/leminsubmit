@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/18 19:54:34 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/19 08:57:21 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -550,7 +550,8 @@ int	**makeedge(t_game *game)
 	i = 0;
 	while (i < len)
 	{
-		edge[i] = malloc(sizeof(int) * (len + 1)); //terminator sentinal set to -1
+		edge[i] = malloc(sizeof(int) * (len + 1));
+		//terminator sentinal set to -1
 		i++;
 	}
 //	printf("i:%d\n", i;
@@ -678,7 +679,8 @@ void	addtopathlist(t_game *game, int *path)
 	t_path *find;
 	t_path *prev;
 
-	moves = path[(game->rmlst)->id] * -1;
+	//moves = path[(game->rmlst)->id] * -1;
+	moves = (path[(game->rmlst)->id + 1] * -1) -1;
 	tmp = makepath(path, moves);
 	prev = NULL;
 	find = game->path;
@@ -686,13 +688,15 @@ void	addtopathlist(t_game *game, int *path)
 		return ;
 	//if (find->moves >= moves) this weirdly workds on one case
 	//if (find->moves <= moves)
-	if (find->moves < moves)
+	//if (find->moves < moves)
+	if (find->moves >= moves)
 	{
 		tmp->nx = game->path;
 		game->path = tmp;
 		return ;
 	}
-	while (find && (find->moves >= moves))
+	//while (find && (find->moves >= moves))
+	while (find && (find->moves < moves))
 	{
 		prev = find;
 		find = find->nx;
@@ -719,8 +723,10 @@ void	allvalidpaths(t_game *game, int end, int *path, int start)
 		if (path[j] == 0 && game->edge[node][j] == 1)
 		{
 			spawn = idup(path);
-			spawn[(end + 1)] -= 1;
-			spawn[j] = spawn[end + 1] * -1;
+			//spawn[(end + 1)] -= 1;
+			spawn[(game->rmlst)->id + 1] -= 1;
+			//spawn[j] = spawn[end + 1] * -1;
+			spawn[j] = spawn[(game->rmlst)->id + 1] * -1;
 			allvalidpaths(game, end, spawn, j);
 		}
 		j++;
