@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/22 11:22:29 by mgould            #+#    #+#              #
-#    Updated: 2017/04/12 12:16:58 by mgould           ###   ########.fr        #
+#    Updated: 2017/04/19 09:40:50 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,12 @@ LIBA = ../thelibrary/libft.a
 
 CFLAGS = -g -Wall -Wextra -Werror -I $(LIB) -I .
 
-OBJCS = main.o initstruct.o
+OBJCS = main.o initstruct.o parseinput.o parserms.o parselnks.o \
+		debug.o
 
+#disable make clean for submission
 all: $(NAME1)
+	make clean
 
 $(NAME1): $(OBJCS) $(LIBA)
 	gcc $(CFLAGS) -o $@ $^
