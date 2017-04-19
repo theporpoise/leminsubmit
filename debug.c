@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:08:50 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 09:08:55 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/19 12:28:36 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,30 @@
 ** DEBUG FUNCTIONS
 */
 
-void	debug_game(t_game *game, char **map, int **edge)
+void	debug_edge(int **edge)
 {
 	int i;
 	int j;
+
+	printf("\nEDGE:\n");
+	i = 0;
+	while (edge[i])
+	{
+		j = 0;
+		while (edge[i][j] != -1)
+		{
+			printf("%-2d ", edge[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+
+void	debug_game(t_game *game, char **map, int **edge)
+{
+	int i;
+	//int j;
 
 	if (!game || !(game->rmlst) || !(game->lnlst))
 		return ;
@@ -68,19 +88,8 @@ void	debug_game(t_game *game, char **map, int **edge)
 		i++;
 	}
 
-	printf("\nEDGE:\n");
-	i = 0;
-	while (edge[i])
-	{
-		j = 0;
-		while (edge[i][j] != -1)
-		{
-			printf("%-2d ", edge[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
+	debug_edge(edge);
+
 	//Debug SOLVER
 	printf("capacity:%d\n", game->cap);
 }
@@ -92,8 +101,7 @@ void	debug_path(t_path *inpath)
 	int *path;
 
 	path = inpath->path;
-	printf("moves is:%d ", inpath->moves);
-	printf("path array: ");
+	printf("moves is:%d path array: ", inpath->moves);
 	i = 0;
 	while (path[i] > -1)
 	{
@@ -111,7 +119,7 @@ void	debug_allpaths(t_game *game)
 	t_path *tmp;
 	int i;
 
-	printf("printing all paths\n");
+	printf("PRINTING ALL PATHS\n");
 	i = 0;
 	tmp = game->path;
 	while (tmp)
@@ -133,8 +141,7 @@ void	debug_routes(t_path **routes, t_game *game)
 	if (!routes)
 		return ;
 	tmp = routes;
-	printf("in debug routes\n");
-	while ((i < game->cap))
+	while ((i < (game->cap)) && tmp[i])
 	{
 		tpath = tmp[i];
 		printf("iterating through paths in route:%d\n", i);

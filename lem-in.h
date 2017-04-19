@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/22 14:06:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 09:37:59 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/19 12:28:21 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,14 @@ typedef struct	s_path
 }				t_path;
 
 /*
+** INIT STRUCT FUNCTIONS
+*/
+t_game	*makegame(void);
+t_room	*makeroom(char *name, int x, int y);
+t_lnk	*makelnk(char *one, char *two);
+t_path	*makepath(int *array, int moves);
+t_path	**routearray(int capacity);
+/*
 ** PARSE FUNCTIONS
 */
 int	ft_isnbr(char *ln);
@@ -79,15 +87,26 @@ int islink(t_game *game, char *one, char *two);
 int vallink(char *ln, t_game *game);
 int valinput(char *ln, t_game *game);
 int parseinput(t_game *game);
-
 /*
-** INIT STRUCT FUNCTIONS
+** DISPLAY MAP
 */
-t_game	*makegame(void);
-t_room	*makeroom(char *name, int x, int y);
-t_lnk	*makelnk(char *one, char *two);
-t_path	*makepath(int *array, int moves);
-t_path	**routearray(int capacity);
+int xdim(t_game *game);
+int ydim(t_game *game);
+void popmap(char **map, int x, int y, t_game *game);
+char **makemap(t_game *game);
+/*
+** EDGES
+*/
+void	popedge(int **map, int len, t_game *game);
+void	lnkstoids(t_lnk *lnk, t_room *rm);
+int		**makeedge(t_game *game);
+/*
+** PATHFINDING
+*/
+void	networkcapacity(t_game *game);
+int		*idup(int *path);
+void	addtopathlist(t_game *game, int *path);
+void	allvalidpaths(t_game *game, int end, int *path, int start);
 /*
 ** DEBUG FUNCTIONS
 */
@@ -95,7 +114,7 @@ void	debug_game(t_game *game, char **map, int **edge);
 void	debug_path(t_path *inpath);
 void	debug_allpaths(t_game *game);
 void	debug_routes(t_path **routes, t_game *game);
-
+void	debug_edge(int **edge);
 
 /*
 ** helper functions for return

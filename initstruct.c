@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/18 19:22:43 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/19 12:25:12 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,16 @@ t_path	*makepath(int *array, int moves)
 
 t_path	**routearray(int capacity)
 {
+	int i;
 	t_path	**routes;
 
+	i = 0;
 	routes = malloc(sizeof(t_path *) * (capacity + 1));
+	while (i < capacity)
+	{
+		routes[i] = NULL;
+		i++;
+	}
 	routes[capacity] = NULL;
-
 	return (routes);
 }
