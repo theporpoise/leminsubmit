@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 19:51:35 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/18 19:22:43 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,14 @@ t_game	*makegame(void)
 	game = malloc(sizeof(t_game));
 	game->nbr = 0;
 	game->end = NULL;
+	game->start = NULL;
 	game->rmlst = NULL;
 	game->lnlst = NULL;
 	game->map = NULL;
 	game->edge = NULL;
+	game->cap = 0;
+	game->path = NULL;
+	game->routes = NULL;
 
 	return (game);
 
@@ -57,4 +61,27 @@ t_lnk	*makelnk(char *one, char *two)
 	lnk->nx = NULL;
 
 	return (lnk);
+}
+
+t_path	*makepath(int *array, int moves)
+{
+	t_path	*path;
+
+	path = malloc(sizeof(t_path));
+	path->path = array;
+	path->moves = moves;
+	path->nx = NULL;
+
+	return (path);
+}
+
+
+t_path	**routearray(int capacity)
+{
+	t_path	**routes;
+
+	routes = malloc(sizeof(t_path *) * (capacity + 1));
+	routes[capacity] = NULL;
+
+	return (routes);
 }

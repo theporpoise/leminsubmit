@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 20:02:58 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/18 19:54:34 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,26 @@ void	debug_game(t_game *game, char **map, int **edge)
 	printf("END\n%-24s%d\t%d\t%d\n\n", (game->end)->nm, (game->end)->id, \
 		   	(game->end)->x, (game->end)->y);
 	//debug rooms
+	/*
 	printf("\nROOMS:\n");
 	printf("Name\t\t\tID\tX\tY\t\n");
+
 	while (game->rmlst)
 	{
 		printf("%-24s%d\t%d\t%d\n", (game->rmlst)->nm, (game->rmlst)->id, \
 			   	(game->rmlst)->x, (game->rmlst)->y);
 		game->rmlst = (game->rmlst)->nx;
 	}
+	*/
 	//debug links
+
 	printf("\nLINKS:\n");
 	while (game->lnlst)
 	{
 		printf("%s\t%s\n", (game->lnlst)->a, (game->lnlst)->b);
 		game->lnlst = (game->lnlst)->nx;
 	}
+
 	printf("\nMAP:\n");
 	i = 0;
 	while (map[i])
@@ -76,7 +81,8 @@ void	debug_game(t_game *game, char **map, int **edge)
 		printf("\n");
 		i++;
 	}
-
+	//Debug SOLVER
+	printf("capacity:%d\n", game->cap);
 }
 
 
@@ -246,11 +252,6 @@ int valroom(char *ln, int *command, t_game *game)
 	return (3);
 }
 
-
-
-
-
-
 int roomexists(char *one, char *two, t_game *game)
 {
 	t_room	*rm;
@@ -372,13 +373,6 @@ int	valinput(char *ln, t_game *game)
 	}
 	return (0);
 }
-
-
-//TO DO
-//coordinate map make a coordinate map function to help visualize everything!
-//create a room edges integer map
-//make a cleanup function.
-//
 
 /*
 ** DISPLAY MAP FUNCTIONS
@@ -503,8 +497,8 @@ void	popedge(int **map, int len, t_game *game)
 	tmp = game->lnlst;
 	while (tmp)
 	{
-		//printf("x:%d y:%d, ", tmp->x, tmp->y);
 		map[tmp->x][tmp->y] = 1;
+		map[tmp->y][tmp->x] = 1;
 		tmp = tmp->nx;
 	}
 	i = 0;
@@ -517,6 +511,7 @@ void	popedge(int **map, int len, t_game *game)
 				map[i][j] = 0;
 			j++;
 		}
+		//setting terminal sentinal to negative one
 		map[i][j] = -1;
 		i++;
 	}
@@ -524,7 +519,6 @@ void	popedge(int **map, int len, t_game *game)
 
 void	lnkstoids(t_lnk *lnk, t_room *rm)
 {
-	//t_lnk	*tmp2;
 	t_room	*tmp;
 
 	while (lnk)
@@ -548,31 +542,29 @@ int	**makeedge(t_game *game)
 	int	len;
 	int i;
 
+	//number of rooms is simply the highest id number, how nice :-)
 	len = ((game->rmlst)->id + 1);
-
 	//	printf("len:%d", len);
 	edge = malloc(sizeof(int *) * (len + 1));
 	edge[len] = NULL;
 	i = 0;
 	while (i < len)
 	{
-		edge[i] = malloc(sizeof(int) * (len + 1)); //terminator sentinal
+		edge[i] = malloc(sizeof(int) * (len + 1)); //terminator sentinal set to -1
 		i++;
 	}
-//	printf("i:%d\n", i);
+//	printf("i:%d\n", i;
 	lnkstoids(game->lnlst, game->rmlst);
 	popedge(edge, len, game);
 	return (edge);
 }
 
-int main(void)
+int	parseinput(t_game *game)
 {
 	char *line;
 	int i;
-	t_game	*game;
 
-	game = makegame();
-	//move all this to a parase input function
+
 	i = 0;
 	while (get_next_line(0, &line) > 0)
 	{
@@ -580,16 +572,289 @@ int main(void)
 		{
 			printf("Error\n");
 			free(line);
-			//return 0 here, which triggers cleanup function
 			//OR return the cleanup function :-).
-			break ;
+			return (0) ;
 		}
 		else if (i == 1)
-			printf("%s\n", line);
+			//printf("%s\n", line);
 		free(line);
 	}
 	printf("\n");
-	//end of parse input
+	return (1);
+}
+
+
+/*
+** PATHFINDING NOTES
+*/
+
+void	networkcapacity(t_game *game)
+{
+	int i;
+	int startcon;
+	int endcon;
+
+	i = 0;
+	startcon = 0;
+	endcon = 0;
+	while((game->edge)[(game->start)->id][i] != -1)
+	{
+		if ((game->edge)[(game->start)->id][i] == 1)
+			startcon++;
+		i++;
+	}
+	i = 0;
+	while((game->edge)[(game->end)->id][i] != -1)
+	{
+		if ((game->edge)[(game->end)->id][i] == 1)
+			endcon++;
+		i++;
+	}
+	game->cap = (startcon < endcon ? startcon : endcon);
+}
+
+
+void	debug_path(t_path *inpath)
+{
+	int i;
+	int *path;
+
+	path = inpath->path;
+	printf("moves is:%d ", inpath->moves);
+	printf("path array: ");
+	i = 0;
+	while (path[i] > -1)
+	{
+		printf("%d, ", path[i]);
+		i++;
+	}
+	printf("%d, ", path[i]);
+	printf("\n");
+
+
+}
+
+void	debug_allpaths(t_game *game)
+{
+	t_path *tmp;
+	int i;
+
+	printf("printing all paths\n");
+	i = 0;
+	tmp = game->path;
+	while (tmp)
+	{
+		debug_path(tmp);
+		tmp = tmp->nx;
+		i++;
+	}
+	printf("number of paths is %d\n\n", i);
+}
+
+int		*idup(int *path)
+{
+	int i;
+	int *spawn;
+
+	i = 0;
+	while (path[i] >= 0)
+		i++;
+	spawn = malloc(sizeof(int) * (i + 1));
+	i = 0;
+	while (path[i] >= 0)
+	{
+		spawn[i] = path[i];
+		i++;
+	}
+	spawn[(i)] = path[(i)];
+	return (spawn);
+
+}
+
+void	addtopathlist(t_game *game, int *path)
+{
+	int moves;
+	t_path *tmp;
+	t_path *find;
+	t_path *prev;
+
+	moves = path[(game->rmlst)->id] * -1;
+	tmp = makepath(path, moves);
+	prev = NULL;
+	find = game->path;
+	if (!(game->path) && (game->path = tmp))
+		return ;
+	//if (find->moves >= moves) this weirdly workds on one case
+	//if (find->moves <= moves)
+	if (find->moves < moves)
+	{
+		tmp->nx = game->path;
+		game->path = tmp;
+		return ;
+	}
+	while (find && (find->moves >= moves))
+	{
+		prev = find;
+		find = find->nx;
+	}
+	prev->nx = tmp;
+	tmp->nx = find;
+}
+
+void	allvalidpaths(t_game *game, int end, int *path, int start)
+{
+	int node;
+	int j;
+	int *spawn;
+
+	node = start;
+	j = 0;
+	if (path[end] > 0)
+	{
+		addtopathlist(game, path);
+		return ;
+	}
+	while ((game->edge)[node][j] >= 0)
+	{
+		if (path[j] == 0 && game->edge[node][j] == 1)
+		{
+			spawn = idup(path);
+			spawn[(end + 1)] -= 1;
+			spawn[j] = spawn[end + 1] * -1;
+			allvalidpaths(game, end, spawn, j);
+		}
+		j++;
+	}
+	free(path);
+}
+
+
+/*
+** FINDING ROUTES
+*/
+
+//NOTES
+//if you can't find a route, return zero
+//int		*idup(int *path)
+
+
+
+t_path	*copypath(t_path *path)
+{
+	t_path *ret;
+
+	ret = malloc(sizeof(t_path));
+	ret->path = idup(path->path);
+	ret->moves = path->moves;
+	ret->nx = NULL;
+
+	return (ret);
+}
+
+//check total moves vs. total nodes
+//break if it doesn't work, and set to null
+//break if route overlap
+
+void	debug_routes(t_path **routes, t_game *game)
+{
+	t_path **tmp;
+	t_path	*tpath;
+	int i;
+
+	i = 0;
+	if (!routes)
+		return ;
+	tmp = routes;
+	printf("in debug routes\n");
+	while ((i < game->cap))
+	{
+		tpath = tmp[i];
+		printf("iterating through paths in route:%d\n", i);
+		while (tpath)
+		{
+			debug_path(tpath);
+			tpath = tpath->nx;
+		}
+		i++;
+	}
+	printf("total # of routes is %d\n", i);
+}
+
+int		getrouten(t_path **routes, t_game *game, int n)
+{
+	int i;
+	int ret;
+	t_path *tmp;
+
+	tmp = NULL;
+	ret = 1;
+	i = 0;
+
+	while (i < (n + 1))
+	{
+	//	printf("getrouten one in  while\n");
+		tmp = copypath(game->path);
+		tmp->nx = routes[n];
+		routes[n] = tmp;
+		i++;
+	}
+//	printf("getrouten  two past while\n");
+	//printf("paths in routes is %d\n", getroutelen(routes[n]));
+	return (ret);
+}
+
+void	getroutes(t_game *game)
+{
+	int n;
+	int i;
+
+	i = 0;
+	n = game->cap;
+	game->routes = routearray(n);
+	while (i < n)
+	{
+		getrouten(game->routes, game, i);
+		i++;
+	}
+
+}
+
+int	routefinder(t_game *game)
+{
+	int *path;
+
+	path = malloc(sizeof(int) * (((game->rmlst)->id) + 2));
+	ft_memset(path, 0, sizeof(path));
+	path[((game->rmlst)->id) + 1] = -1;
+	path[(game->start)->id] = (path[((game->rmlst)->id) + 1] * -1);
+
+	allvalidpaths(game, (game->end)->id, path, (game->start)->id);
+	printf("PRINTING ALL PATHS BEFORE ROUTE FUNCTIONS\n");
+	debug_allpaths(game);
+	if (!game->path)
+		return (0);
+	networkcapacity(game);
+	//here is the error
+	printf("AFTER CAPACITY IS %d\n", game->cap);
+	//getroutes(game);
+
+	//printf("AFTER GET ROUTES\n");
+	//debug_routes(game->routes, game);
+
+	return (1);
+}
+
+
+int main(void)
+{
+	t_game	*game;
+
+	game = makegame();
+	if (!parseinput(game))
+	{
+		//cleanup
+		return (0);
+	}
 
 	//MAP FOR VISUALIZATION
 	game->map = makemap(game);
@@ -598,34 +863,26 @@ int main(void)
 
 
 	//FUNCTION THAT SOLVES IT
-	//get paths
+
+	if (!routefinder(game))
+	{
+		printf("there are no valid routes!\n");
+	}
+
+	//find shortest path
 	//get routes
+	//make ants
 	//calcualte routs + paths and print ant-walk function
 
 	//DEBUG
 	debug_game(game, game->map, game->edge);
 
 	//CLEANUP
-	//create function that cleans up the game
+	//create function that cleans up the game, everything is in the game
+	//OR cleanup function can be a return value :-).
 	free(game);
 	return (0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/22 14:06:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/13 19:47:33 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/18 15:07:06 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ typedef struct	s_game
 	struct s_lnk	*lnlst;
 	char			**map;
 	int				**edge;
+	int				cap;
+	struct s_path	*path;
+	struct s_path	**routes;
+
 }				t_game;
 
 typedef struct	s_room
@@ -48,12 +52,21 @@ typedef struct	s_lnk
 	struct s_lnk	*nx;
 }				t_lnk;
 
+typedef struct	s_path
+{
+	int				*path;
+	int				moves;
+	struct s_path	*nx;
+}				t_path;
+
 /*
 ** INIT STRUCT FUNCTIONS
 */
 t_game	*makegame(void);
 t_room	*makeroom(char *name, int x, int y);
 t_lnk	*makelnk(char *one, char *two);
+t_path	*makepath(int *array, int moves);
+t_path	**routearray(int capacity);
 /*
 ** DEBUG FUNCTIONS
 */
