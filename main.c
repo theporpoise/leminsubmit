@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 12:59:26 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 12:37:27 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@
 ** FINDING ROUTES
 */
 //int		*idup(int *path)
+//check total moves vs. total nodes
+//break if it doesn't work, figure out how to return
+//break if route overlap
+//
 
 
 
@@ -37,52 +41,130 @@ t_path	*copypath(t_path *path)
 	return (ret);
 }
 
-//check total moves vs. total nodes
-//break if it doesn't work, figure out how to return
-//break if route overlap
-//
-//functions to make:
-//route overlap
-//recursive iterator function that uses route overlap
+void	releasepath(t_path *path)
+{
+	if (!path)
+		return;
+	if (path->path)
+		free(path->path);
+	free(path);
+}
 
-//int	getpath(select path to add to route);
+int		overlap(t_game *game, t_path *path, int *two)
+{
+	int i;
+	int j;
 
-//if equal in length to n, then return
-//if empty, choose the first route
-//else recurse
+	if (!path)
+		return (0);
+	i = 0;
+	j = 0;
+	while (path)
+	{
+		printf("inside overlap while round:%d\n", j);
+		i = 0;
+		while ((path->path)[i] >= 0)
+		{
+			printf("path->pathi:%d, twoi:%d\n", (path->path)[i], two[i]);
+			if ((game->end)->id == i)
+				;
+			else if ((game->start)->id == i)
+				;
+			else if (((path->path)[i] * two[i]) > 0)
+			{
+				printf("there is an overlap at position:%d\n", i);
+				return (1);
+			}
+			i++;
+		}
+		j++;
+		path = path->nx;
+	}
+	return (0);
+}
 
+int		enoughpaths(t_path **routes, int n)
+{
+	int i;
+	t_path *tmp;
 
-//int		getrouten(t_path *routes, t_game *game, int n)
+	tmp = routes[n];
+	i = 0;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->nx;
+	}
+	//tmp = path;
+	if (i != (n + 1))
+	{
+		while(routes[n])
+		{
+			tmp = (routes[n])->nx;
+			releasepath(routes[n]);
+			routes[n] = tmp;
+		}
+		printf("DID NOT find enough paths:%d for route:%d\n", (i + 1), n);
+		return (0);
+	}
+	return (1);
+}
+
 int		getrouten(t_path **routes, t_game *game, int n)
 {
 	int i;
-	int ret;
 	t_path *tmp;
+	t_path *iter;
+	//t_path *head;
 
+	iter = game->path;
 	tmp = NULL;
-	ret = 1;
+	//head = tmp;
 	i = 0;
-
-//	routes = NULL;
-//	game = NULL;
-//	n = 1;
-
-
-
 
 	while (i < (n + 1))
 	{
-		//select the correct route here, this is thinking
-		tmp = copypath(game->path);
-		//tmp->nx = routes;
-		tmp->nx = routes[n];
-		routes[n] = tmp;
-		//routes = tmp;
+		if (!iter)
+			break ;
+		else if (overlap(game, routes[n], (iter)->path))
+		{
+			printf("you triggered overlap\n");
+			iter = iter->nx;
+			continue;
+		}
+		else
+		{
+			tmp = copypath(iter);
+			tmp->nx = routes[n];
+			routes[n] = tmp;
+			iter = iter->nx;
+		}
 		i++;
 	}
-
-
-	return (ret);
+	//checking to see if enough paths in route
+	if (!enoughpaths(routes, n))
+		return (0);
+	/*
+	i = 0;
+	tmp = routes[n];
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->nx;
+	}
+	if (i != (n + 1))
+	{
+		while(routes[n])
+		{
+			tmp = (routes[n])->nx;
+			releasepath(routes[n]);
+			routes[n] = tmp;
+		}
+		printf("DID NOT find enough paths:%d for route:%d\n", (i + 1), n);
+		return (0);
+	}
+	*/
+	return (1);
 }
 
 void	getroutes(t_game *game)
@@ -95,11 +177,17 @@ void	getroutes(t_game *game)
 	game->routes = routearray(n);
 	while (i < n)
 	{
-		getrouten((game->routes), game, i);
-		//getrouten((game->routes)[i], game, i);
+		if (!getrouten((game->routes), game, i))
+		{
+			printf("breaking early bc not enough paths\n");
+			//recursively call getrouten with next one in batch.
+			//pass in next path?, but start checking at beginning of list?
+			//terminate if you hit the end?
+			break ;
+
+		}
 		i++;
 	}
-
 }
 
 int	routefinder(t_game *game)
@@ -118,7 +206,7 @@ int	routefinder(t_game *game)
 	networkcapacity(game);
 	//here is the error
 	getroutes(game);
-	printf("AFTER GETROUTES, GOT %d ROUTES\n", game->cap);
+	printf("AFTER GETROUTES, MAX %d ROUTES\n", game->cap);
 	debug_routes(game->routes, game);
 	debug_edge(game->edge);
 	return (1);
