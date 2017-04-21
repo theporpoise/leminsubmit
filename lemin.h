@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:33:46 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 20:37:46 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 11:32:30 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 /*
 ** STRUCTS
 */
-
 typedef struct	s_game
 {
 	int				nbr;
@@ -35,7 +34,9 @@ typedef struct	s_game
 	int				cap;
 	struct s_path	*path;
 	struct s_path	**routes;
-
+	int				rnbr;
+	int				*rcap;
+	struct s_ant	*ant;
 }				t_game;
 
 typedef struct	s_room
@@ -64,6 +65,14 @@ typedef struct	s_path
 	struct s_path	*nx;
 }				t_path;
 
+typedef struct	s_ant
+{
+	int				nbr;
+	int				step;
+	int				*path;
+	struct s_ant	*nx;
+}				t_ant;
+
 /*
 ** INIT STRUCT FUNCTIONS
 */
@@ -72,6 +81,7 @@ t_room			*makeroom(char *name, int x, int y);
 t_lnk			*makelnk(char *one, char *two);
 t_path			*makepath(int *array, int moves);
 t_path			**routearray(int capacity);
+t_ant			*makeant(t_path *path);
 /*
 ** PARSE FUNCTIONS
 */
@@ -126,7 +136,8 @@ void			debug_path(t_path *inpath);
 void			debug_allpaths(t_game *game);
 void			debug_routes(t_path **routes, t_game *game);
 void			debug_edge(int **edge);
-
+void			debug_pathsinroute(t_path *routepaths);
+void			debug_intarray(int *inpath);
 /*
 ** helper functions for return
 */

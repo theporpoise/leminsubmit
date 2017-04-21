@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 20:30:09 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 11:33:06 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_game	*makegame(void)
 	game->cap = 0;
 	game->path = NULL;
 	game->routes = NULL;
+	game->rnbr = 0;
+	game->rcap = NULL;
 	return (game);
 }
 
@@ -85,3 +87,32 @@ t_path	**routearray(int capacity)
 	routes[capacity] = NULL;
 	return (routes);
 }
+
+t_ant	*makeant(t_path *path)
+{
+	static int	i;
+	t_ant		*ant;
+
+	i += 1;
+	ant = malloc(sizeof(t_ant));
+	ant->nbr = i;
+	ant->step = 2;
+	ant->path = path->path;
+	ant->nx = NULL;
+
+	return (ant);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:08:50 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 20:29:34 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 11:23:06 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,7 @@ void	debug_game(t_game *game, char **map, int **edge)
 		printf("%s\n", map[i]);
 		i++;
 	}
-
 	debug_edge(edge);
-
-	//Debug SOLVER
-	printf("capacity:%d\n", game->cap);
 }
 
 
@@ -110,8 +106,23 @@ void	debug_path(t_path *inpath)
 	}
 	printf("%d, ", path[i]);
 	printf("\n");
+}
 
 
+void	debug_intarray(int *inpath)
+{
+	int i;
+	int *path;
+
+	path = inpath;
+	i = 0;
+	while (path[i] > -1)
+	{
+		printf("%d, ", path[i]);
+		i++;
+	}
+	printf("%d, ", path[i]);
+	printf("\n");
 }
 
 void	debug_allpaths(t_game *game)
@@ -122,6 +133,24 @@ void	debug_allpaths(t_game *game)
 	printf("PRINTING ALL PATHS\n");
 	i = 0;
 	tmp = game->path;
+	while (tmp)
+	{
+		debug_path(tmp);
+		tmp = tmp->nx;
+		i++;
+	}
+	printf("number of paths is %d\n\n", i);
+}
+
+
+void	debug_pathsinroute(t_path *routepaths)
+{
+	t_path *tmp;
+	int i;
+
+	printf("PRINTING ALL PATHS IN ROUTE\n");
+	i = 0;
+	tmp = routepaths;
 	while (tmp)
 	{
 		debug_path(tmp);
