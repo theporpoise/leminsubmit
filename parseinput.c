@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:14:31 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 09:39:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 18:13:03 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	parseinput(t_game *game)
 			return (0) ;
 		}
 		else if (i == 1)
-			//printf("%s\n", line);
+			printf("%s\n", line);
 		free(line);
 	}
 	printf("\n");

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 12:25:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 16:45:15 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ t_path	*makepath(int *array, int moves)
 	path = malloc(sizeof(t_path));
 	path->path = array;
 	path->moves = moves;
+	path->origin = path; //path
 	path->nx = NULL;
 
 	return (path);

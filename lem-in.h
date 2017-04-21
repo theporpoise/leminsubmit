@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/22 14:06:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 12:28:21 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 16:45:06 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ typedef struct	s_path
 {
 	int				*path;
 	int				moves;
+	struct s_path	*origin; // *origin
 	struct s_path	*nx;
 }				t_path;
 
