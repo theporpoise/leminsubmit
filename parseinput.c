@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:14:31 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 18:13:03 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 19:13:15 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	parseinput(t_game *game)
 	{
 		if (!(i = valinput(line, game)))
 		{
+			//debug_game
 			printf("Error\n");
 			free(line);
 			//OR return the cleanup function :-).

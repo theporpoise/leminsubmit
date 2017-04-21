@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 18:11:52 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 19:46:12 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@
 /*
 ** FINDING ROUTES
 */
-//int		*idup(int *path)
-//check total moves vs. total nodes
-//break if it doesn't work, figure out how to return
-//break if route overlap
-//
 
 t_path	*copypath(t_path *path)
 {
@@ -49,7 +44,6 @@ void	releasepath(t_path *path)
 	free(path);
 }
 
-
 int		enoughpaths(t_path **routes, int n)
 {
 	int i;
@@ -64,16 +58,6 @@ int		enoughpaths(t_path **routes, int n)
 	}
 	if (i != (n + 1))
 	{
-		//remove this side effect
-		/*
-		while(routes[n])
-		{
-			tmp = (routes[n])->nx;
-			releasepath(routes[n]);
-			routes[n] = tmp;
-		}
-		printf("DID NOT find enough paths:%d for route:%d\n", (i + 1), n);
-		*/
 		return (0);
 	}
 	return (1);
@@ -107,77 +91,45 @@ int		overlap(t_game *game, t_path *path, t_path *two)
 }
 
 
-int		getrouten(t_path **routes, t_game *game, int n, t_path *prev)
+void	looptosolution(t_path **routes, t_game *game, int n, t_path *prev)
 {
-	int i;
 	t_path *tmp;
 	t_path *iter;
-	t_path *recursetmp;
 
-	if (!prev)
-		return (0);
-	//printf("now assigning iter\n");
 	iter = (prev->origin)->nx;
-
 	tmp = prev;
 	routes[n] = tmp;
-	//printf("in get route n\n");
-	i = 0;
-	while (i < n) //(n + 1))
+
+	while (!enoughpaths(routes, n) && iter)
 	{
-		if (!iter)
+		if (!overlap(game, routes[n], iter))
 		{
-		//	printf("four\n");
-			break ;
-		}
-		else if (overlap(game, routes[n], iter))
-		{
-		//	printf("you triggered overlap\n");
-			iter = iter->nx;
-			continue;
-		}
-		else
-		{
-	//		printf("no overlap\n");
 			tmp = copypath(iter);
 			tmp->nx = routes[n];
 			routes[n] = tmp;
-			iter = iter->nx;
 		}
-	//	printf("five\n");
-		i++;
+		iter = iter->nx;
 	}
+}
 
-	//checking to see if enough paths in route
+int		getrouten(t_path **routes, t_game *game, int n, t_path *prev)
+{
+	t_path *rtmp;
+
+	if (!prev)
+		return (0);
+	looptosolution(routes, game, n, prev);
 	if (!enoughpaths(routes, n))
 	{
-	//	return (0);
-
-	//	printf("begin recursion\n");
-		if (prev->nx)
-		{
-	//		printf("one\n");
-			recursetmp = prev->nx;
-			recursetmp->origin = (prev->origin);
-			releasepath(prev);
-			return (getrouten(routes, game, n, recursetmp));
-		}
-		else if (!(prev->nx) && (prev->origin)->nx)
-		{
-	//		printf("two\n");
-			recursetmp = copypath((prev->origin)->nx);
-			releasepath(prev);
-			return (getrouten(routes, game, n, recursetmp));
-		}
-		else
-		{
-			releasepath(prev);
+		if (!(prev->nx) && !((prev->origin)->nx) && (rtmp = NULL))
 			routes[n] = NULL;
-	//		printf("hit the base case, there is no better combo\n");
-			return (0);
-		}
+		else if (prev->nx && (rtmp = prev->nx))
+			rtmp->origin = (prev->origin);
+		else if ((prev->origin)->nx)
+			rtmp = copypath((prev->origin)->nx);
+		releasepath(prev);
+		return (getrouten(routes, game, n, rtmp));
 	}
-//	printf("seven\n");
 	return (1);
 }
 
@@ -193,10 +145,10 @@ void	getroutes(t_game *game)
 	{
 		if (!getrouten((game->routes), game, i, copypath(game->path)))
 		{
+			(game->routes)[i] = NULL;
 			printf("breaking early bc not enough paths\n");
 			break ;
 		}
-//		printf("outside while\n");
 		i++;
 	}
 }
@@ -211,7 +163,6 @@ int	routefinder(t_game *game)
 	path[(game->start)->id] = (path[((game->rmlst)->id) + 1] * -1);
 
 	allvalidpaths(game, (game->end)->id, path, (game->start)->id);
-	//debug_allpaths(game);
 	if (!game->path)
 		return (0);
 	networkcapacity(game);
@@ -234,13 +185,11 @@ int main(void)
 	}
 	game->map = makemap(game);
 	game->edge = makeedge(game);
-
-	//FUNCTION THAT SOLVES IT
-
 	if (!routefinder(game))
 	{
 		printf("there are no valid routes!\n");
 	}
+	//MARCH THE ANTS
 
 	//cleanup
 	free(game);
@@ -273,10 +222,7 @@ int main(void)
 
 
 
-
-
-	//find shortest path
-	//get routes
+	//MARCH ANTS
 	//make ants
 	//calcualte routs + paths and print ant-walk function
 
@@ -286,3 +232,4 @@ int main(void)
 	//CLEANUP
 	//create function that cleans up the game, everything is in the game
 	//OR cleanup function can be a return value :-).
+	//check memory

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:08:50 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 16:20:47 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 19:13:11 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	debug_game(t_game *game, char **map, int **edge)
 	printf("END\n%-24s%d\t%d\t%d\n\n", (game->end)->nm, (game->end)->id, \
 		   	(game->end)->x, (game->end)->y);
 	//debug rooms
-	/*
+
 	printf("\nROOMS:\n");
 	printf("Name\t\t\tID\tX\tY\t\n");
 
@@ -70,7 +70,7 @@ void	debug_game(t_game *game, char **map, int **edge)
 			   	(game->rmlst)->x, (game->rmlst)->y);
 		game->rmlst = (game->rmlst)->nx;
 	}
-	*/
+
 	//debug links
 
 	printf("\nLINKS:\n");

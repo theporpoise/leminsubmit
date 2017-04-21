@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 09:39:52 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 19:34:05 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	duprmcoords(t_room *tmp, t_room *game)
 	return (0);
 }
 
+
+//need to free memory here when i return from the words funciton
 int isroom(char *ln, t_game *game)
 {
 	char	**words;
