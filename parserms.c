@@ -6,14 +6,13 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 19:34:05 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 20:50:54 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lem-in.h>
+#include <lemin.h>
 
 int	duprmcoords(t_room *tmp, t_room *game)
-
 {
 	t_room *xy;
 
@@ -34,13 +33,12 @@ int	duprmcoords(t_room *tmp, t_room *game)
 	return (0);
 }
 
-
-//need to free memory here when i return from the words funciton
-int isroom(char *ln, t_game *game)
+int	isroom(char *ln, t_game *game)
 {
 	char	**words;
 	t_room	*tmp;
 
+	//need to free memory here when i return from the words funciton
 	if (*ln == '#')
 		return (2);
 	tmp = NULL;
@@ -59,10 +57,10 @@ int isroom(char *ln, t_game *game)
 	return (1);
 }
 
-int valstartorend(int sore, t_game *game)
+int	valstartorend(int sore, t_game *game)
 {
-	char *check;
-	int i;
+	char	*check;
+	int		i;
 
 	get_next_line(0, &check);
 	if (!(ft_strcmp("##end", check) || !ft_strcmp("##start", check)))
@@ -84,7 +82,7 @@ int valstartorend(int sore, t_game *game)
 	return (2);
 }
 
-int valroom(char *ln, int *command, t_game *game)
+int	valroom(char *ln, int *command, t_game *game)
 {
 	static int start;
 	static int end;
@@ -112,7 +110,7 @@ int valroom(char *ln, int *command, t_game *game)
 	return (3);
 }
 
-int roomexists(char *one, char *two, t_game *game)
+int	roomexists(char *one, char *two, t_game *game)
 {
 	t_room	*rm;
 	int		flag;
@@ -124,7 +122,7 @@ int roomexists(char *one, char *two, t_game *game)
 		if (!ft_strcmp(one, rm->nm))
 		{
 			flag = 1;
-			break;
+			break ;
 		}
 		rm = rm->nx;
 	}
@@ -134,7 +132,7 @@ int roomexists(char *one, char *two, t_game *game)
 		if (!ft_strcmp(two, rm->nm))
 		{
 			flag += 1;
-			break;
+			break ;
 		}
 		rm = rm->nx;
 	}

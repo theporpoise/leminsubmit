@@ -6,11 +6,11 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 16:45:15 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 20:30:09 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lem-in.h>
+#include <lemin.h>
 
 t_game	*makegame(void)
 {
@@ -27,15 +27,13 @@ t_game	*makegame(void)
 	game->cap = 0;
 	game->path = NULL;
 	game->routes = NULL;
-
 	return (game);
-
 }
 
 t_room	*makeroom(char *name, int x, int y)
 {
-	t_room *room;
-	static int i;
+	t_room		*room;
+	static int	i;
 
 	room = malloc(sizeof(t_room));
 	room->nm = name;
@@ -43,11 +41,9 @@ t_room	*makeroom(char *name, int x, int y)
 	room->x = x;
 	room->y = y;
 	room->nx = NULL;
-
 	i++;
 	return (room);
 }
-
 
 t_lnk	*makelnk(char *one, char *two)
 {
@@ -59,7 +55,6 @@ t_lnk	*makelnk(char *one, char *two)
 	lnk->x = -1;
 	lnk->y = -1;
 	lnk->nx = NULL;
-
 	return (lnk);
 }
 
@@ -70,16 +65,14 @@ t_path	*makepath(int *array, int moves)
 	path = malloc(sizeof(t_path));
 	path->path = array;
 	path->moves = moves;
-	path->origin = path; //path
+	path->origin = path;
 	path->nx = NULL;
-
 	return (path);
 }
 
-
 t_path	**routearray(int capacity)
 {
-	int i;
+	int		i;
 	t_path	**routes;
 
 	i = 0;

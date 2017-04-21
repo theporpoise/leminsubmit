@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/22 11:22:29 by mgould            #+#    #+#              #
-#    Updated: 2017/04/19 10:05:17 by mgould           ###   ########.fr        #
+#    Updated: 2017/04/20 20:10:52 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LIBA = ../thelibrary/libft.a
 CFLAGS = -g -Wall -Wextra -Werror -I $(LIB) -I .
 
 OBJCS = main.o initstruct.o parseinput.o parserms.o parselnks.o \
-		displaymap.o edgemap.o pathfind.o \
+		displaymap.o edgemap.o pathfind.o pathhelpers.o findroutes.o \
 		debug.o
 
 #disable make clean for submission

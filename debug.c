@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:08:50 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 19:13:11 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 20:29:34 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <lem-in.h>
+#include <lemin.h>
 
 
 /*

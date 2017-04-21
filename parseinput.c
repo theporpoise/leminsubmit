@@ -6,28 +6,28 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:14:31 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 19:13:15 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 20:45:25 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lem-in.h>
+#include <lemin.h>
 
 /*
 ** PARSING NOTES
 */
 
 /*
- * Rooms can be separated by multiple spaces
- * Room name can NOT start with an L
- * Room names can NOT contain a '-' b/c undefined behavior for links
- * I ignore leading or trailing white space for rooms
- * Must provide 2 coordinates which are numbers.
- * I allow negative (-) and (+) numbers for coordinates.
- * I do NOT allow duplicate coordinates for 2 diff rooms b/c laws of physics!
- * I do NOT allow duplicate room names, even with diff coords,
- * 		b/c i wouldn't know where to send the ants
- * I IGNORE duplicate links or links to self
- * I only allow ONE start or end due to undefined behavior otherwise.
+** Rooms can be separated by multiple spaces
+** Room name can NOT start with an L
+** Room names can NOT contain a '-' b/c undefined behavior for links
+** I ignore leading or trailing white space for rooms
+** Must provide 2 coordinates which are numbers.
+** I allow negative (-) and (+) numbers for coordinates.
+** I do NOT allow duplicate coordinates for 2 diff rooms b/c laws of physics!
+** I do NOT allow duplicate room names, even with diff coords,
+** 		b/c i wouldn't know where to send the ants
+** I IGNORE duplicate links or links to self
+** I only allow ONE start or end due to undefined behavior otherwise.
 */
 
 int	ft_isnbr(char *ln)
@@ -46,7 +46,7 @@ int	ft_isnbr(char *ln)
 
 int	valantcount(char *ln, int *command, t_game *game)
 {
-	if (!ft_strcmp("##end", ln) ||!ft_strcmp("##start", ln))
+	if (!ft_strcmp("##end", ln) || !ft_strcmp("##start", ln))
 		return (0);
 	if (*ln == '#')
 		return (2);
@@ -61,20 +61,20 @@ int	valantcount(char *ln, int *command, t_game *game)
 	return (0);
 }
 
-int ft_getarraylen(char **array)
+int	ft_getarraylen(char **array)
 {
 	int i;
 
 	i = 0;
 	while (array[i])
 		i++;
-	return i;
+	return (i);
 }
 
 int	valinput(char *ln, t_game *game)
 {
-	static int command;
-	int i;
+	static int	command;
+	int			i;
 
 	i = 0;
 	if (command == 0)
@@ -94,20 +94,18 @@ int	valinput(char *ln, t_game *game)
 
 int	parseinput(t_game *game)
 {
-	char *line;
-	int i;
-
+	char	*line;
+	int		i;
 
 	i = 0;
 	while (get_next_line(0, &line) > 0)
 	{
 		if (!(i = valinput(line, game)))
 		{
-			//debug_game
 			printf("Error\n");
 			free(line);
 			//OR return the cleanup function :-).
-			return (0) ;
+			return (0);
 		}
 		else if (i == 1)
 			printf("%s\n", line);

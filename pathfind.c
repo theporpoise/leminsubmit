@@ -6,11 +6,11 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 10:04:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/19 10:05:04 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/20 20:52:54 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lem-in.h>
+#include <lemin.h>
 
 void	networkcapacity(t_game *game)
 {
@@ -21,14 +21,14 @@ void	networkcapacity(t_game *game)
 	i = 0;
 	startcon = 0;
 	endcon = 0;
-	while((game->edge)[(game->start)->id][i] != -1)
+	while ((game->edge)[(game->start)->id][i] != -1)
 	{
 		if ((game->edge)[(game->start)->id][i] == 1)
 			startcon++;
 		i++;
 	}
 	i = 0;
-	while((game->edge)[(game->end)->id][i] != -1)
+	while ((game->edge)[(game->end)->id][i] != -1)
 	{
 		if ((game->edge)[(game->end)->id][i] == 1)
 			endcon++;
@@ -54,33 +54,27 @@ int		*idup(int *path)
 	}
 	spawn[(i)] = path[(i)];
 	return (spawn);
-
 }
 
 void	addtopathlist(t_game *game, int *path)
 {
-	int moves;
-	t_path *tmp;
-	t_path *find;
-	t_path *prev;
+	int		moves;
+	t_path	*tmp;
+	t_path	*find;
+	t_path	*prev;
 
-	//moves = path[(game->rmlst)->id] * -1;
-	moves = (path[(game->rmlst)->id + 1] * -1) -1;
+	moves = (path[(game->rmlst)->id + 1] * -1) - 1;
 	tmp = makepath(path, moves);
 	prev = NULL;
 	find = game->path;
 	if (!(game->path) && (game->path = tmp))
 		return ;
-	//if (find->moves >= moves) this weirdly workds on one case
-	//if (find->moves <= moves)
-	//if (find->moves < moves)
 	if (find->moves >= moves)
 	{
 		tmp->nx = game->path;
 		game->path = tmp;
 		return ;
 	}
-	//while (find && (find->moves >= moves))
 	while (find && (find->moves < moves))
 	{
 		prev = find;
@@ -108,9 +102,7 @@ void	allvalidpaths(t_game *game, int end, int *path, int start)
 		if (path[j] == 0 && game->edge[node][j] == 1)
 		{
 			spawn = idup(path);
-			//spawn[(end + 1)] -= 1;
 			spawn[(game->rmlst)->id + 1] -= 1;
-			//spawn[j] = spawn[end + 1] * -1;
 			spawn[j] = spawn[(game->rmlst)->id + 1] * -1;
 			allvalidpaths(game, end, spawn, j);
 		}
