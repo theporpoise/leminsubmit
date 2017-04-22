@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:33:46 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/21 11:32:30 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 14:41:34 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct	s_ant
 	int				step;
 	int				*path;
 	struct s_ant	*nx;
+	int				donezo;
 }				t_ant;
 
 /*
@@ -138,12 +139,5 @@ void			debug_routes(t_path **routes, t_game *game);
 void			debug_edge(int **edge);
 void			debug_pathsinroute(t_path *routepaths);
 void			debug_intarray(int *inpath);
-/*
-** helper functions for return
-*/
-
-/*
-** operation functions
-*/
 
 #endif

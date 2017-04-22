@@ -6,35 +6,11 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/21 11:36:31 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 21:28:10 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <lemin.h>
-
-	//MARCH ANTS
-	//creat ant stack
-	//create helper room lookup
-	//route chooser
-	//	->capacity per route
-	//print function runs through ant stack
-
-	//MARCH THE ANTS
-	//ant = game->nbr; while ants, create ant stack with ant name.
-	//ant struct
-	//		->carries a map and their name
-	//		->prints L(antnumber)-(destinationname)
-	//routevalues ->create integer array? will need to look these up. . .
-
-	//DEBUG
-	//debug_game(game, game->map, game->edge);
-
-	//CLEANUP
-	//create function that cleans up the game struct
-	//OR cleanup function can be a return value :-).
-
-	//MEMORY
-	//gonna have to chase this one down with Valgrind on the splitwords fncs
 
 void	routecount(t_game *game)
 {
@@ -80,7 +56,6 @@ void	routecap(t_game *game)
 	while (i < game->rnbr)
 	{
 		ret[i] = singleroutecap((game->routes)[i]);
-		printf("\nroute %d with throughput %d cap is: %d\n", i, i+1, ret[i]);
 		i++;
 	}
 	ret[i] = -1;
@@ -92,7 +67,7 @@ t_path	*selectroute(t_game *game)
 	int i;
 
 	i = 0;
-	while ((game->nbr > game->rcap[i])) // && game->rcap[i] != -1)
+	while ((game->nbr > game->rcap[i]))
 	{
 		if (game->rcap[i + 1] == -1)
 			break ;
@@ -101,33 +76,85 @@ t_path	*selectroute(t_game *game)
 	return ((game->routes)[i]);
 }
 
-void	printants(t_ant *ant)
+char	*matchnumber(t_game *game, t_ant *ant)
 {
-	t_ant *tmp;
+	int		i;
+	t_room	*rooms;
+	char	*ret;
 
+	i = 0;
+	rooms = game->rmlst;
+	while (ant->step != ant->path[i])
+	{
+		if (ant->path[i] < 0)
+		{
+			ant->donezo = 1;
+			return (NULL);
+		}
+		i++;
+	}
+	while (rooms->id != i)
+	{
+		rooms = rooms->nx;
+	}
+	ret = rooms->nm;
+	return (ret);
+}
+
+int		alldone(t_ant *ant)
+{
+	int		i;
+	t_ant	*tmp;
+
+	i = 0;
 	tmp = ant;
-	printf("PRINTING ANTS\n");
 	while (tmp)
 	{
-		printf("ant number:%d, step is %d ant route is", tmp->nbr, tmp->step);
-		debug_intarray(tmp->path);
+		if (!(tmp->donezo))
+		{
+			return (0);
+		}
 		tmp = tmp->nx;
+	}
+	return (1);
+}
+
+void	printants(t_game *game, t_ant *ant)
+{
+	t_ant	*tmp;
+	char	*name;
+	int		flag;
+
+	flag = 0;
+	tmp = ant;
+	while (tmp)
+	{
+		if (tmp->donezo)
+		{
+			tmp = tmp->nx;
+			continue;
+		}
+		if ((name = matchnumber(game, tmp)))
+		{
+			if (flag == 1)
+				printf(" ");
+			printf("L%d-%s", tmp->nbr, name);
+			flag = 1;
+		}
+		tmp->step += 1;
+		tmp = tmp->nx;
+
 	}
 }
 
 void	antmarch(t_game *game)
 {
-	int i;
 	t_path	*route;
 	t_ant	*nextant;
 
-	i = 0;
 	while (game->nbr)
 	{
-		i++;
-		printf("\n%d iter of ants made\n", i);
 		route = selectroute(game);
-		debug_pathsinroute(route);
 		while(route)
 		{
 			nextant = makeant(route);
@@ -137,13 +164,14 @@ void	antmarch(t_game *game)
 			game->ant = nextant;
 			game->nbr -= 1;
 		}
-		printants(game->ant);
-		printf("end of while\n");
-		//march ants and update their int arrays
-		//  ->will need a room lookup, id to name
-		//  ->print out L(antname)-(roomname) for every ant on same row
-		//  ->have to make sure printing out the right move;
-		//print their marching orders
+		printants(game, game->ant);
+		printf("\n");
+	}
+	while (!alldone(game->ant))
+	{
+		printants(game, game->ant);
+		if (!alldone(game->ant))
+			printf("\n");
 	}
 }
 
@@ -160,17 +188,14 @@ int main(void)
 	game->edge = makeedge(game);
 	if (!routefinder(game))
 	{
-		printf("there are no valid routes!\n");
+		printf("Error\nThere are no valid routes!\n");
+		//free everything
+		return (0);
 	}
-	//route setup
 	routecount(game);
-	printf("\nROUTECOUNT is %d\n", game->rnbr);
 	routecap(game);
-	//
 	antmarch(game);
-
-
-	//cleanup
+	//free everything
 	free(game);
 	return (0);
 }

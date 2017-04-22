@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 10:04:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 20:52:54 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 21:24:46 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,21 @@ void	addtopathlist(t_game *game, int *path)
 
 void	allvalidpaths(t_game *game, int end, int *path, int start)
 {
-	int node;
-	int j;
-	int *spawn;
+	int 		node;
+	int 		j;
+	int 		*spawn;
+	static int	i;
 
 	node = start;
 	j = 0;
+	i++;
 	if (path[end] > 0)
 	{
 		addtopathlist(game, path);
 		return ;
 	}
+	if (i > 100000)
+		return ;
 	while ((game->edge)[node][j] >= 0)
 	{
 		if (path[j] == 0 && game->edge[node][j] == 1)

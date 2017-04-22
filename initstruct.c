@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/21 11:33:06 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 12:30:08 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ t_ant	*makeant(t_path *path)
 	ant->step = 2;
 	ant->path = path->path;
 	ant->nx = NULL;
+	ant->donezo = 0;
 
 	return (ant);
 }
