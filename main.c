@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/21 21:28:10 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/21 21:47:50 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,11 @@ void	antmarch(t_game *game)
 			printf("\n");
 	}
 }
+
+//TO DO
+//check lemin grade sheet, check all test cases
+//norm
+//recheck lemin grading sheet and test cases
 
 int main(void)
 {
