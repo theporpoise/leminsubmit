@@ -6,7 +6,7 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/22 11:22:29 by mgould            #+#    #+#              #
-#    Updated: 2017/04/20 20:10:52 by mgould           ###   ########.fr        #
+#    Updated: 2017/04/23 09:05:20 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CFLAGS = -g -Wall -Wextra -Werror -I $(LIB) -I .
 
 OBJCS = main.o initstruct.o parseinput.o parserms.o parselnks.o \
 		displaymap.o edgemap.o pathfind.o pathhelpers.o findroutes.o \
-		debug.o
+		initstruct1.o selectroute.o antmarch.o
 
 #disable make clean for submission
 all: $(NAME1)

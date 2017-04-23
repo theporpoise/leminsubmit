@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:33:46 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/21 14:41:34 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 09:02:10 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,10 @@ int				enoughpaths(t_path **routes, int n);
 ** ROUTE FINDING
 */
 int				routefinder(t_game *game);
+void			routecount(t_game *game);
+void			routecap(t_game *game);
+t_path			*selectroute(t_game *game);
+void			antmarch(t_game *game);
 /*
 ** DEBUG FUNCTIONS
 */
