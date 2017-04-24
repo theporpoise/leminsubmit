@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 10:04:08 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 09:26:25 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 20:40:50 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	allvalidpaths(t_game *game, int end, int *path, int start)
 	}
 	if (i > 100000)
 		return ;
-	while ((game->edge)[start][j] >= 0 && (++j > -1))
+	while ((++j > -1) && (game->edge)[start][j] >= 0) // && (++j > -1))
 	{
 		if (path[j] == 0 && game->edge[start][j] == 1)
 		{

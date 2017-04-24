@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:08:38 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/22 21:22:56 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 20:07:37 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	getrouten(t_path **routes, t_game *game, int n, t_path *prev)
 	t_path		*rtmp;
 	static int	i;
 
-	if (!prev || (++i > 10000))
+	if (!prev || (++i > 1000))
 		return (0);
 	looptosolution(routes, game, n, prev);
 	if (!enoughpaths(routes, n))
@@ -102,10 +102,17 @@ static void	getroutes(t_game *game)
 
 int			routefinder(t_game *game)
 {
-	int *path;
+	int				*path;
+	unsigned long	i;
 
+	i = 0;
 	path = malloc(sizeof(int) * (((game->rmlst)->id) + 2));
 	ft_memset(path, 0, sizeof(path));
+	while (i < sizeof(path))
+	{
+		path[i] = 0;
+		i++;
+	}
 	path[((game->rmlst)->id) + 1] = -1;
 	path[(game->start)->id] = (path[((game->rmlst)->id) + 1] * -1);
 	allvalidpaths(game, (game->end)->id, path, (game->start)->id);

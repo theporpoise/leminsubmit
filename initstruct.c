@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/12 12:04:04 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 08:50:57 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 10:21:23 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_game	*makegame(void)
 	game->routes = NULL;
 	game->rnbr = 0;
 	game->rcap = NULL;
+	game->ant = NULL;
 	return (game);
 }
 
