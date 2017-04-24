@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:55:06 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 19:53:26 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 20:45:44 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ char	**makemap(t_game *game)
 	while (i < x)
 	{
 		map[i] = malloc(sizeof(char) * (y + 1));
-		//
 		map[i][y] = '\0';
 		j = 0;
 		while (j < y)
@@ -120,20 +119,3 @@ char	**makemap(t_game *game)
 	popmap(map, x, y, game);
 	return (map);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:59:36 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 20:37:20 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 20:44:45 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,16 @@ int		**makeedge(t_game *game)
 
 	len = ((game->rmlst)->id + 1);
 	edge = malloc(sizeof(int *) * (len + 1));
-	//edge[len] = NULL;
 	i = 0;
 	while (i < len)
 	{
 		edge[i] = malloc(sizeof(int) * (len + 1));
-		//
 		j = 0;
 		while (j < len)
 		{
 			edge[i][j] = 0;
 			j++;
 		}
-
-		//
 		i++;
 	}
 	lnkstoids(game->lnlst, game->rmlst);
