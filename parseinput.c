@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:14:31 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 09:09:56 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 23:04:53 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,17 @@ int	parseinput(t_game *game)
 	{
 		if (!(i = valinput(line, game)))
 		{
-			printf("Error\n");
+			ft_printf("Error\n");
 			free(line);
 			return (0);
 		}
 		else if (i == 1)
-			printf("%s\n", line);
+		{
+			ft_putstr(line);
+			ft_putstr("\n");
+		}
 		free(line);
 	}
-	printf("\n");
+	ft_printf("\n");
 	return (1);
 }

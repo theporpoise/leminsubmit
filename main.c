@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 22:36:01 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 23:02:28 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int			main(void)
 	game->edge = makeedge(game);
 	if (!routefinder(game))
 	{
-		printf("Error\nThere are no valid routes!\n");
+		ft_putstr("Error\nThere are no valid routes!\n");
 		return (freethemalloc(&game));
 	}
 	routecount(game);

@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/23 09:01:17 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 09:07:46 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 23:01:34 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,12 @@ static int	alldone(t_ant *ant)
 	return (1);
 }
 
-static void	printants(t_game *game, t_ant *ant)
+static void	printants(t_game *game, t_ant *tmp)
 {
-	t_ant	*tmp;
 	char	*name;
 	int		flag;
 
 	flag = 0;
-	tmp = ant;
 	while (tmp)
 	{
 		if (tmp->donezo)
@@ -73,8 +71,11 @@ static void	printants(t_game *game, t_ant *ant)
 		if ((name = matchnumber(game, tmp)))
 		{
 			if (flag == 1)
-				printf(" ");
-			printf("L%d-%s", tmp->nbr, name);
+				ft_printf(" ");
+			ft_putstr("L");
+			ft_putnbr(tmp->nbr);
+			ft_putstr("-");
+			ft_putstr(name);
 			flag = 1;
 		}
 		tmp->step += 1;
@@ -99,12 +100,12 @@ void		antmarch(t_game *game)
 			game->nbr -= 1;
 		}
 		printants(game, game->ant);
-		printf("\n");
+		ft_printf("\n");
 	}
 	while (!alldone(game->ant))
 	{
 		printants(game, game->ant);
 		if (!alldone(game->ant))
-			printf("\n");
+			ft_printf("\n");
 	}
 }

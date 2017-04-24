@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 22:39:12 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 23:08:02 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ int	valstartorend(int sore, t_game *game)
 		game->start = game->rmlst;
 	else if (i == 1 && sore == 0)
 		game->end = game->rmlst;
-	printf("%s\n", check);
+	ft_putstr(check);
+	ft_putstr("\n");
 	free(check);
 	return (2);
 }
@@ -91,13 +92,13 @@ int	valroom(char *ln, int *command, t_game *game)
 		return (0);
 	else if (!(ft_strcmp("##start", ln)) && start == 0)
 	{
-		printf("##start\n");
+		ft_printf("##start\n");
 		start++;
 		return (valstartorend(1, game));
 	}
 	else if (!(ft_strcmp("##end", ln)) && end == 0)
 	{
-		printf("##end\n");
+		ft_printf("##end\n");
 		end++;
 		return (valstartorend(0, game));
 	}
