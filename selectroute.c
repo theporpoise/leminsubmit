@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/23 09:04:58 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 09:12:38 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 11:23:18 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,11 @@ void		routecap(t_game *game)
 
 t_path		*selectroute(t_game *game)
 {
-	int i;
+	int 		i;
+	static int	j;
 
+	if (j)
+		return ((game->routes)[j]);
 	i = 0;
 	while ((game->nbr > game->rcap[i]))
 	{
@@ -73,5 +76,6 @@ t_path		*selectroute(t_game *game)
 			break ;
 		i++;
 	}
+	j = i;
 	return ((game->routes)[i]);
 }
