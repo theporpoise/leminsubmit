@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:14:31 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 23:18:20 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 00:49:59 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	parseinput(t_game *game)
 			free(line);
 			return (0);
 		}
-		else if (i == 1)
+		else if (i != 0 && ft_strcmp("##start", line) && ft_strcmp("##end", line))
 		{
 			ft_putstr(line);
 			ft_putstr("\n");

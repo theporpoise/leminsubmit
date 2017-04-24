@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/24 00:29:09 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 00:46:49 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,10 @@ int	valstartorend(int sore, t_game *game)
 
 	get_next_line(0, &check);
 	if (!(ft_strcmp("##end", check) || !ft_strcmp("##start", check)))
-		return (0);
-	if ((i = isroom(check, game)) == 0)
-		return (0);
-	if (i == 2)
+		;
+	else if ((i = isroom(check, game)) == 0)
+		;
+	else if (i == 2)
 	{
 		free(check);
 		i = valstartorend(sore, game);
