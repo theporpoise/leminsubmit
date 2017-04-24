@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/21 20:10:22 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 22:39:12 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,21 @@ int	isroom(char *ln, t_game *game)
 	char	**words;
 	t_room	*tmp;
 
-	//need to free memory here when i return from the words funciton
 	if (*ln == '#')
 		return (2);
 	tmp = NULL;
 	words = ft_strsplit(ln, ' ');
 	if (*ln == 'L' || (ft_getarraylen(words) != 3) || ft_strchr(words[0], '-') \
 			|| !ft_isnbr(words[1]) || !ft_isnbr(words[2]))
-		return (0);
+		return (fwords(words, 0, tmp));
 	tmp = makeroom(words[0], atoi(words[1]), atoi(words[2]));
+	if (duprmcoords(tmp, game->rmlst))
+		return (fwords(words, 0, tmp));
+	tmp->nx = game->rmlst;
+	game->rmlst = tmp;
 	free(words[1]);
 	free(words[2]);
 	free(words);
-	if (duprmcoords(tmp, game->rmlst))
-		return (0);
-	tmp->nx = game->rmlst;
-	game->rmlst = tmp;
 	return (1);
 }
 

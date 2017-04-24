@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:31:07 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/20 20:54:03 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 22:37:46 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,20 @@ int		enoughpaths(t_path **routes, int n)
 		return (0);
 	}
 	return (1);
+}
+
+int		fwords(char **words, int ret, t_room *tmp)
+{
+	int i;
+
+	i = 0;
+	while (words[i])
+	{
+		free(words[i]);
+		i++;
+	}
+	free(words);
+	if (tmp)
+		free(tmp);
+	return (ret);
 }
