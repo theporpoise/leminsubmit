@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/24 00:46:49 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 01:02:24 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,36 +55,6 @@ int	isroom(char *ln, t_game *game)
 	free(words);
 	return (1);
 }
-
-/*
-
-int	valstartorend(int sore, t_game *game)
-{
-	char	*check;
-	int		i;
-
-	get_next_line(0, &check);
-	if (!(ft_strcmp("##end", check) || !ft_strcmp("##start", check)))
-		return (0);
-	if ((i = isroom(check, game)) == 0)
-		return (0);
-	if (i == 2)
-	{
-		free(check);
-		i = valstartorend(sore, game);
-		return (i);
-	}
-	else if (i == 1 && sore == 1)
-		game->start = game->rmlst;
-	else if (i == 1 && sore == 0)
-		game->end = game->rmlst;
-	ft_putstr(check);
-	ft_putstr("\n");
-	free(check);
-	return (2);
-}
-
-*/
 
 int	valstartorend(int sore, t_game *game)
 {

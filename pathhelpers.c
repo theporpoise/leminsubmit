@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:31:07 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 22:37:46 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 01:11:04 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,18 @@ int		fwords(char **words, int ret, t_room *tmp)
 	if (tmp)
 		free(tmp);
 	return (ret);
+}
+
+void	antsandcap(t_game *game)
+{
+	t_ant	*ant;
+
+	ant = game->ant;
+	free(game->rcap);
+	while (game->ant)
+	{
+		ant = (game->ant)->nx;
+		free(game->ant);
+		game->ant = ant;
+	}
 }

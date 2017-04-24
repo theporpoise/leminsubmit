@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:14:31 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/24 00:49:59 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 01:03:23 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,24 +94,24 @@ int	valinput(char *ln, t_game *game)
 
 int	parseinput(t_game *game)
 {
-	char	*line;
+	char	*ln;
 	int		i;
 
 	i = 0;
-	while (get_next_line(0, &line) > 0)
+	while (get_next_line(0, &ln) > 0)
 	{
-		if (!(i = valinput(line, game)))
+		if (!(i = valinput(ln, game)))
 		{
 			ft_printf("Error\n");
-			free(line);
+			free(ln);
 			return (0);
 		}
-		else if (i != 0 && ft_strcmp("##start", line) && ft_strcmp("##end", line))
+		else if (i != 0 && ft_strcmp("##start", ln) && ft_strcmp("##end", ln))
 		{
-			ft_putstr(line);
+			ft_putstr(ln);
 			ft_putstr("\n");
 		}
-		free(line);
+		free(ln);
 	}
 	ft_putstr("\n");
 	return (1);

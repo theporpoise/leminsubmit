@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/24 00:11:43 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 01:12:33 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ static int	freethemalloc(t_game **gamepointer)
 {
 	int		len;
 	t_game	*game;
-	t_ant	*ant;
 
 	len = 0;
 	game = *gamepointer;
@@ -109,16 +108,7 @@ static int	freethemalloc(t_game **gamepointer)
 	mapandedges(game, len);
 	pathsandroutes(game);
 	if (game->ant)
-	{
-		free(game->rcap);
-		ant = game->ant;
-		while (game->ant)
-		{
-			ant = (game->ant)->nx;
-			free(game->ant);
-			game->ant = ant;
-		}
-	}
+		antsandcap(game);
 	free(game);
 	return (0);
 }

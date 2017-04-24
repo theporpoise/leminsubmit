@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:33:46 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 23:10:14 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 01:11:35 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ t_path			*copypath(t_path *path);
 void			releasepath(t_path *path);
 int				enoughpaths(t_path **routes, int n);
 int				fwords(char **words, int ret, t_room *tmp);
+void			antsandcap(t_game *game);
 /*
 ** ROUTE FINDING
 */
