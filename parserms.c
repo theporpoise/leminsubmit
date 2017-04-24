@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:29:32 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/24 01:02:24 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 01:17:24 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	isroom(char *ln, t_game *game)
 	if (*ln == 'L' || (ft_getarraylen(words) != 3) || ft_strchr(words[0], '-') \
 			|| !ft_isnbr(words[1]) || !ft_isnbr(words[2]))
 		return (fwords(words, 0, tmp));
-	tmp = makeroom(words[0], atoi(words[1]), atoi(words[2]));
+	tmp = makeroom(words[0], ft_atoi(words[1]), ft_atoi(words[2]));
 	if (duprmcoords(tmp, game->rmlst))
 		return (fwords(words, 0, tmp));
 	tmp->nx = game->rmlst;
