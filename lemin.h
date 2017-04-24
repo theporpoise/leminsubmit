@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/20 20:33:46 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 22:38:09 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/23 23:10:14 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "libft.h"
 # include <fcntl.h>
-# include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
 
