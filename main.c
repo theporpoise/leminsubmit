@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/05 18:30:33 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 23:02:28 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 00:11:43 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ static void	pathsandroutes(t_game *game)
 		free((game->path));
 		game->path = ptmp;
 	}
+	if (!(game->routes))
+		return ;
 	while ((game->routes)[i])
 	{
 		while ((game->routes)[i])
@@ -79,6 +81,8 @@ static void	rmsandlsts(t_game *game)
 		free((game->rmlst));
 		game->rmlst = rtmp;
 	}
+	free(game->lnlst);
+	free(game->rmlst);
 }
 
 static int	freethemalloc(t_game **gamepointer)
@@ -87,18 +91,33 @@ static int	freethemalloc(t_game **gamepointer)
 	t_game	*game;
 	t_ant	*ant;
 
+	len = 0;
 	game = *gamepointer;
+	if (!(game->rmlst))
+	{
+		free(game);
+		return (0);
+	}
 	len = (game->rmlst)->id;
-	ant = game->ant;
+	if (!(game->start) || !(game->end))
+	{
+		rmsandlsts(game);
+		free(game);
+		return (0);
+	}
 	rmsandlsts(game);
 	mapandedges(game, len);
 	pathsandroutes(game);
-	free(game->rcap);
-	while (game->ant)
+	if (game->ant)
 	{
-		ant = (game->ant)->nx;
-		free(game->ant);
-		game->ant = ant;
+		free(game->rcap);
+		ant = game->ant;
+		while (game->ant)
+		{
+			ant = (game->ant)->nx;
+			free(game->ant);
+			game->ant = ant;
+		}
 	}
 	free(game);
 	return (0);

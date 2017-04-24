@@ -6,7 +6,7 @@
 /*   By: mgould <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 09:32:44 by mgould            #+#    #+#             */
-/*   Updated: 2017/04/23 22:36:21 by mgould           ###   ########.fr       */
+/*   Updated: 2017/04/24 00:17:20 by mgould           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ int	vallink(char *ln, t_game *game)
 		ret = 1;
 	else
 		ret = islink(game, words[0], words[1]);
-	free(words);
+	if (ret == 0)
+		fwords(words, 0, NULL);
+	else
+		free(words);
 	return (ret);
 }
