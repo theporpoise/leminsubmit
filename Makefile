@@ -6,15 +6,15 @@
 #    By: mgould <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/22 11:22:29 by mgould            #+#    #+#              #
-#    Updated: 2017/04/23 10:10:24 by mgould           ###   ########.fr        #
+#    Updated: 2017/04/24 01:25:05 by mgould           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME1 = lem-in
 
-LIB = ../thelibrary
+LIB = thelibrary
 
-LIBA = ../thelibrary/libft.a
+LIBA = thelibrary/libft.a
 
 CFLAGS = -g -Wall -Wextra -Werror -I $(LIB) -I .
 
@@ -35,8 +35,7 @@ $(LIBA):
 
 clean:
 	rm -f $(OBJCS)
-#cd $(LIB) && make fclean
-#enable this for submission
+	cd $(LIB) && make fclean
 
 fclean: clean
 	rm -f $(NAME1)
