@@ -1,0 +1,19 @@
+#!/usr/bin/
+echo "\nNO ROOM\n"
+sleep 2
+make ; sleep 1 ; time ./lem-in < ztestmaps/norooms.map
+echo "\nNO ANTS\n"
+sleep 2
+make ; sleep 1 ; time ./lem-in < ztestmaps/noants.map
+echo "\nNO START\n"
+sleep 2
+make ; sleep 1 ; time ./lem-in < ztestmaps/nostart.map
+echo "\nNO END\n"
+sleep 2
+make ; sleep 1 ; time ./lem-in < ztestmaps/noend.map
+echo "\nNO START OR END\n"
+sleep 2
+make ; sleep 1 ; time ./lem-in < ztestmaps/nostartorend.map
+echo "\nNO SOLUTION\n"
+sleep 2
+make ; sleep 2 ; time ./lem-in < ztestmaps/nosolution.map
